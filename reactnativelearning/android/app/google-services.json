@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "491686113760",
+    "project_id": "expo-notifications-test-c67c4",
+    "storage_bucket": "expo-notifications-test-c67c4.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:491686113760:android:2cb44656189aebf0a13b85",
+        "android_client_info": {
+          "package_name": "com.rajeshranjanexpo.reactnativelearning"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCvtf3xXM2IWKFhc4o2jcLYhsFux4_KcE8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
