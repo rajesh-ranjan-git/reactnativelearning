@@ -1,5 +1,5 @@
-import schedule from "node-schedule";
-// import { schedule } from "node-cron";
+// import schedule from "node-schedule";
+import { schedule } from "node-cron";
 
 // From node-schedule
 // const job = schedule.scheduleJob("* * * * * *", () => {
@@ -100,10 +100,90 @@ import schedule from "node-schedule";
 
 // From node-schedule
 // This no longer works as server will keep on running
-const job = schedule.scheduleJob("* * * * * *", () => {
-  console.log("Running a task every second!");
-});
-setInterval(() => {
-  schedule.gracefulShutdown();
-  console.log("Graceful Shutdown!");
-}, 10000);
+// const job = schedule.scheduleJob("* * * * * *", () => {
+//   console.log("Running a task every second!");
+// });
+// setInterval(() => {
+//   schedule.gracefulShutdown();
+//   console.log("Graceful Shutdown!");
+// }, 10000);
+
+async function setExpoPushToken(req: Request, res: Response): Promise<void> {
+  try {
+    const { userId, expoPushToken } = req.body;
+
+    if (!userId || !isValidObjectId(userId)) {
+      res.status(404).json({ message: "UserId not valid" });
+      return;
+    }
+
+    const user = await User.findById(userId);
+
+    if (user) {
+      const updatedData = await User.findByIdAndUpdate(
+        { _id: userId },
+        { expoPushToken: expoPushToken }
+      );
+    }
+  } catch (err) {
+    res.status(500).send({ result: false, message: err.message });
+  }
+}
+
+// Function to send reminders
+const sendReminderNotifications = async () => {
+  const now1 = new Date();
+  console.log("I am running", now1);
+  try {
+    const now = new Date();
+    console.log("now : ", now);
+    const reminderTime = new Date(now.getTime() + 30 * 60000);
+    console.log("reminderTime : ", reminderTime);
+    console.log(
+      `date - reminderTime.toISOString().split("T")[0] : , ${
+        reminderTime.toISOString().split("T")[0]
+      }`
+    );
+    console.log(
+      `startTime - reminderTime.toTimeString().split(" ")[0] : , ${
+        reminderTime.toTimeString().split(" ")[0]
+      }`
+    );
+    // const upcomingSessions = await SessionRequestModel.find({
+    //   status: "confirmed",
+    //   date: reminderTime.toISOString().split("T")[0],
+    //   startTime: { $gte: reminderTime.toTimeString().split(" ")[0] },
+    // });
+
+    // for (const session of upcomingSessions) {
+    //   const participants = session.participants;
+    //   const messages = [];
+    //   for (const userId of participants) {
+    //     const user = await User.findById(userId);
+    //     if (
+    //       user &&
+    //       user.expoPushToken &&
+    //       Expo.isExpoPushToken(user.expoPushToken)
+    //     ) {
+    //       messages.push({
+    //         to: user.expoPushToken,
+    //         sound: "default",
+    //         body: `Reminder: Your session on ${session.topic} is starting soon in 30 minutes!`,
+    //         data: { session },
+    //       });
+    //     }
+    //   }
+    //   const chunks = expo.chunkPushNotifications(messages);
+    //   const tickets = [];
+    //   for (const chunk of chunks) {
+    //     const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+    //     tickets.push(...ticketChunk);
+    //   }
+    //   console.log("Sent reminders");
+    // }
+  } catch (error) {
+    console.error("Error sending reminder notifications", error);
+  }
+};
+
+const job = schedule("* * * * *", sendReminderNotifications); // This job runs every 1 min and send reminders to people who has upcoming session in 30 mins

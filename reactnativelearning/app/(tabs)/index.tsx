@@ -11,7 +11,7 @@ export default function HomeScreen() {
 
   const data = JSON.stringify(notification, undefined, 2);
 
-  console.log("Jello from React Native");
+  console.log("Hello from React Native");
 
   return (
     <ParallaxScrollView
@@ -23,6 +23,10 @@ export default function HomeScreen() {
         />
       }
     >
+      <ThemedView style={styles.stepContainer}>
+        <ThemedText>Token: {expoPushToken?.data ?? ""}</ThemedText>
+        <ThemedText>Data: {data}</ThemedText>
+      </ThemedView>
       <ThemedView style={styles.titleContainer}>
         <ThemedText type="title">
           Welcome to React Native Learning rajesh!
@@ -31,10 +35,6 @@ export default function HomeScreen() {
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
         <ThemedText>This is my first React Native Code!</ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText>Token: {expoPushToken?.data ?? ""}</ThemedText>
-        <ThemedText>Data: {data}</ThemedText>
       </ThemedView>
     </ParallaxScrollView>
   );

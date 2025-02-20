@@ -15,7 +15,7 @@ export interface PushNotificationState {
 export const usePushNotifications = (): PushNotificationState => {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
-      shouldPlaySound: false,
+      shouldPlaySound: true,
       shouldShowAlert: true,
       shouldSetBadge: false,
     }),
@@ -32,6 +32,7 @@ export const usePushNotifications = (): PushNotificationState => {
   const notificationListener = useRef<Notifications.Subscription>();
   const responseListener = useRef<Notifications.Subscription>();
 
+  // Permission for notification
   async function registerForPushNotificationsAsync() {
     let token;
 
@@ -59,7 +60,7 @@ export const usePushNotifications = (): PushNotificationState => {
           name: "default",
           importance: Notifications.AndroidImportance.MAX,
           vibrationPattern: [0, 250, 250, 250],
-          lightColor: "#FF231F7C",
+          lightColor: "#fff",
         });
       }
 
