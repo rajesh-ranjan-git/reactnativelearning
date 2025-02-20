@@ -11,6 +11,8 @@ export default function HomeScreen() {
 
   const data = JSON.stringify(notification, undefined, 2);
 
+  console.log("Jello from React Native");
+
   return (
     <ParallaxScrollView
       headerBackgroundColor={{ light: "#A1CEDC", dark: "#1D3D47" }}
