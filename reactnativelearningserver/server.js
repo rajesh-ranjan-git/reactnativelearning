@@ -119,12 +119,13 @@ async function setExpoPushToken(req: Request, res: Response): Promise<void> {
 
     const user = await User.findById(userId);
 
-    if (user) {
-      const updatedData = await User.findByIdAndUpdate(
-        { _id: userId },
-        { expoPushToken: expoPushToken }
-      );
+    if (!user) {
+      res.status(404).json({ message: "User not found" });
+      return;
     }
+
+    await User.updateOne({ _id: userId }, { expoPushToken });
+    res.status(200).json({ message: "Expo push token updated successfully" });
   } catch (err) {
     res.status(500).send({ result: false, message: err.message });
   }
@@ -149,38 +150,65 @@ const sendReminderNotifications = async () => {
         reminderTime.toTimeString().split(" ")[0]
       }`
     );
-    // const upcomingSessions = await SessionRequestModel.find({
-    //   status: "confirmed",
-    //   date: reminderTime.toISOString().split("T")[0],
-    //   startTime: { $gte: reminderTime.toTimeString().split(" ")[0] },
-    // });
+    const upcomingSessions = await SessionRequestModel.find({
+      status: "confirmed",
+      date: reminderTime.toISOString().split("T")[0],
+      startTime: { $gte: reminderTime.toTimeString().split(" ")[0] },
+    });
 
-    // for (const session of upcomingSessions) {
-    //   const participants = session.participants;
-    //   const messages = [];
-    //   for (const userId of participants) {
-    //     const user = await User.findById(userId);
-    //     if (
-    //       user &&
-    //       user.expoPushToken &&
-    //       Expo.isExpoPushToken(user.expoPushToken)
-    //     ) {
-    //       messages.push({
-    //         to: user.expoPushToken,
-    //         sound: "default",
-    //         body: `Reminder: Your session on ${session.topic} is starting soon in 30 minutes!`,
-    //         data: { session },
-    //       });
-    //     }
-    //   }
-    //   const chunks = expo.chunkPushNotifications(messages);
-    //   const tickets = [];
-    //   for (const chunk of chunks) {
-    //     const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
-    //     tickets.push(...ticketChunk);
-    //   }
-    //   console.log("Sent reminders");
-    // }
+    for (const session of upcomingSessions) {
+      const participants = session.participants;
+      const messages = [];
+      for (const userId of participants) {
+        const user = await User.findById(userId);
+        if (
+          user &&
+          user.expoPushToken &&
+          Expo.isExpoPushToken(user.expoPushToken)
+        ) {
+          messages.push({
+            to: user.expoPushToken,
+            sound: "default",
+            body: `Reminder: Your session on ${session.topic} is starting soon in 30 minutes!`,
+            data: { session },
+          });
+        }
+      }
+      const chunks = expo.chunkPushNotifications(messages);
+      const tickets = [];
+      for (const chunk of chunks) {
+        const ticketChunk = await expo.sendPushNotificationsAsync(chunk);
+        tickets.push(...ticketChunk);
+      }
+
+      const receiptIds = [];
+      for (let ticket of tickets) {
+        if (ticket.status === "ok") {
+          receiptIds.push(ticket.id);
+        }
+      }
+
+      let receiptIdChunks = expo.chunkPushNotificationReceiptIds(receiptIds);
+
+      for (let chunk of receiptIdChunks) {
+        let receipts = await expo.getPushNotificationReceiptsAsync(chunk);
+
+        for (let receiptId in receipts) {
+          let { status, message, details } = receipts[receiptId];
+          if (status === "ok") {
+            continue;
+          } else if (status === "error") {
+            console.error(
+              `There was an error sending a notification: ${message}`
+            );
+            if (details && details.error) {
+              console.error(`The error code is ${details.error}`);
+            }
+          }
+        }
+      }
+      console.log("Sent reminders");
+    }
   } catch (error) {
     console.error("Error sending reminder notifications", error);
   }
