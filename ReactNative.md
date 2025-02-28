@@ -44,3 +44,5 @@
 -> Expo has evolved significantly over the years and now supports nearly all the features for building mobile apps.
 -> In the even that you require access to native Android or iOS code, Expo allows you to eject your app and work with a plain React Native codebase.
 -> Expo is the default choice for setting up React Native development environment.
+
+> This repo mostly contains testing codes from internship
