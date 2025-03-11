@@ -5,9 +5,6 @@ import { useEffect, useState } from "react";
 export default function Index() {
   const [data, setData] = useState(null);
 
-  const [count, setCount] = useState(0);
-  const onPress = () => setCount((prevCount) => prevCount + 1);
-
   function handleDeepLink(event) {
     let data = Linking.parse(event.url);
 
@@ -51,14 +48,6 @@ export default function Index() {
           ? JSON.stringify(data)
           : "App not opened from deep link, I guess deep linking is not working at all."}
       </Text>
-
-      <View style={styles.countContainer}>
-        <Text>Count: {count}</Text>
-      </View>
-
-      <TouchableOpacity style={styles.button} onPress={onPress}>
-        <Text style={{ color: "white", fontSize: 20 }}>Press Here</Text>
-      </TouchableOpacity>
 
       <Text>This button is for deep link.</Text>
       <TouchableOpacity style={styles.button} onPress={handleDeepLink}>
