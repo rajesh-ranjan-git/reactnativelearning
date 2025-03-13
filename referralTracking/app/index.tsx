@@ -1,77 +1,24 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import * as Linking from "expo-linking";
-import { useEffect, useState } from "react";
+import { Text, TouchableOpacity, View, Share } from "react-native";
+import React, { useEffect, useState } from "react";
+import tw from "twrnc";
+import branch from "react-native-branch";
 
 export default function Index() {
-  const [data, setData] = useState(null);
-
-  function handleDeepLink(event) {
-    let data = Linking.parse(event.url);
-
-    console.log("data : ", data);
-
-    setData(data);
-  }
-
-  useEffect(() => {
-    async function getInitialURL() {
-      const initialURL = await Linking.getInitialURL();
-
-      console.log("initialURL : ", initialURL);
-      console.log("initialURL : ", initialURL);
-      console.log(
-        `Linking.parse("initialURL") : `,
-        Linking.parse("initialURL")
-      );
-
-      if (initialURL) setData(Linking.parse("initialURL"));
-    }
-
-    Linking.addEventListener("url", handleDeepLink);
-
-    if (!data) {
-      getInitialURL();
-    }
-  }, []);
-
   return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Text>Lets learn deep linking.</Text>
-      <Text>
-        {data
-          ? JSON.stringify(data)
-          : "App not opened from deep link, I guess deep linking is not working at all."}
-      </Text>
+    <View style={tw`flex-1 justify-center items-center px-4`}>
+      <Text style={tw`text-xl mb-4`}>Your Referral Code: Referral Code</Text>
 
-      <Text>This button is for deep link.</Text>
-      <TouchableOpacity style={styles.button} onPress={handleDeepLink}>
-        <Text style={{ color: "white", fontSize: 20 }}>Press Here</Text>
+      <TouchableOpacity
+        style={tw`bg-blue-500 rounded-lg p-3 w-52 items-center`}
+      >
+        <Text style={tw`text-white text-xl`}>Share App</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity
+        style={tw`bg-blue-500 rounded-lg p-3 w-52 items-center mt-4`}
+      >
+        <Text style={tw`text-white text-xl`}>Generate New Code</Text>
       </TouchableOpacity>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    paddingHorizontal: 10,
-  },
-  button: {
-    alignItems: "center",
-    backgroundColor: "blue",
-    borderRadius: 10,
-    padding: 10,
-    width: 200,
-  },
-  countContainer: {
-    alignItems: "center",
-    padding: 10,
-  },
-});
