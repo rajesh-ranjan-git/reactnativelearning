@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "109202998292",
+    "project_id": "easotatesting",
+    "storage_bucket": "easotatesting.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:109202998292:android:c1dd6abb1d6a53a7255301",
+        "android_client_info": {
+          "package_name": "com.rajeshranjanexpo.easotatesting"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAme3QC-xd09e4u_duxLXjlDlfWekjFvFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
