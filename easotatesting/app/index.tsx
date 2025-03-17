@@ -72,6 +72,8 @@ export default function Index() {
         FCM Token : {fcmTokenToShow}
       </Text>
 
+      <Text style={tw`text-red-500 text-xl`}>This is after a new update.</Text>
+
       <Text style={tw`text-white text-xl`}>{runTypeMessage}</Text>
     </View>
   );
