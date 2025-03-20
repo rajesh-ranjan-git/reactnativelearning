@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { Text, View, Button, Platform } from "react-native";
+import { Text, View, Button, Platform, Image } from "react-native";
 import tw from "twrnc";
 import * as Updates from "expo-updates";
 import * as Device from "expo-device";
@@ -10,23 +10,23 @@ import { checkForUpdates } from "./onLoadUtils";
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
-    shouldPlaySound: false,
-    shouldSetBadge: false,
+    shouldPlaySound: true,
+    shouldSetBadge: true,
   }),
 });
 
 export default function Index() {
   const { currentlyRunning, isUpdateAvailable, isUpdatePending } =
     Updates.useUpdates();
-    const [expoPushToken, setExpoPushToken] = useState("");
-    const [channels, setChannels] = useState<
-      Notifications.NotificationChannel[]
-    >([]);
-    const [notification, setNotification] = useState<
-      Notifications.Notification | undefined
-    >(undefined);
-    const notificationListener = useRef<Notifications.EventSubscription>();
-    const responseListener = useRef<Notifications.EventSubscription>();
+  const [expoPushToken, setExpoPushToken] = useState("");
+  const [channels, setChannels] = useState<Notifications.NotificationChannel[]>(
+    []
+  );
+  const [notification, setNotification] = useState<
+    Notifications.Notification | undefined
+  >(undefined);
+  const notificationListener = useRef<Notifications.EventSubscription>();
+  const responseListener = useRef<Notifications.EventSubscription>();
 
   // Show whether or not we are running embedded code or run the update
   const runTypeMessage = currentlyRunning.isEmbeddedLaunch
@@ -87,9 +87,7 @@ export default function Index() {
         2
       )}`}</Text>
       <View style={{ alignItems: "center", justifyContent: "center" }}>
-        <Text>
-          Title: {notification && notification.request.content.title}{" "}
-        </Text>
+        <Text>Title: {notification && notification.request.content.title}</Text>
         <Text>Body: {notification && notification.request.content.body}</Text>
         <Text>
           Data:{" "}
