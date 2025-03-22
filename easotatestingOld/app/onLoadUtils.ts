@@ -75,7 +75,6 @@ export async function registerForPushNotificationsAsync() {
 export async function schedulePushNotification(
   NotificationContent: NotificationContentType
 ) {
-  console.log("NotificationContent : ", NotificationContent);
   await Notifications.scheduleNotificationAsync({
     content: {
       title: NotificationContent.title,

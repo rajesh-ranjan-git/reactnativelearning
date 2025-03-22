@@ -77,56 +77,76 @@ export default function Index() {
     };
   }, []);
 
-  useEffect(() => {
-    console.log("notificationTitle : ", notificationTitle);
-    console.log("notificationBody : ", notificationBody);
-    console.log("notificationTime : ", notificationTime);
-  }, [notificationTitle, notificationBody, notificationTime]);
-
   return (
     <ScrollView>
-      <View
-        style={tw`flex-1 gap-5 justify-center items-center bg-yellow-400 p-2 m-2 rounded`}
-      >
-        <Text style={tw`m-2 text-2xl font-bold`}>Notifications testing</Text>
-        <Text style={tw`text-lg`}>Your expo push token</Text>
-        <Text style={tw`text-lg`}>{expoPushToken}</Text>
+      <View style={tw`flex-1 gap-5 justify-center items-center bg-yellow-400`}>
+        <Text>EAS OTA Update testing.</Text>
+        <Text style={tw`text-red-500 text-xl`}>
+          This is a new text after updates.
+        </Text>
+        <Text style={tw`text-red-500 text-2xl`}>
+          Now I am testing notifications again.
+        </Text>
+
+        <Text style={tw`text-red-500 text-xl`}>
+          This is after a another new update.
+        </Text>
+
+        <Text style={tw`text-white text-xl`}>{runTypeMessage}</Text>
+
+        <Text>Your expo push token: {expoPushToken}</Text>
+        <Text>{`Channels: ${JSON.stringify(
+          channels.map((c) => c.id),
+          null,
+          2
+        )}`}</Text>
+        <View style={{ alignItems: "center", justifyContent: "center" }}>
+          <Text>
+            Title: {notification && notification.request.content.title}
+          </Text>
+          <Text>Body: {notification && notification.request.content.body}</Text>
+          <Text>
+            Data:{" "}
+            {notification && JSON.stringify(notification.request.content.data)}
+          </Text>
+        </View>
       </View>
 
       <View
-        style={tw`flex-1 gap-5 justify-center items-center bg-yellow-400 py-4 m-2 rounded`}
+        style={tw`flex-1 gap-5 justify-center items-center bg-neutral-400 rounded-lg`}
       >
         <TextInput
-          style={tw`w-[90%] border-1 px-4 bg-white rounded`}
+          style={tw`w-[90%] h-10 border-1 px-2 py-1`}
           placeholder="Enter notification title..."
           value={notificationTitle}
           onChange={(e) => setNotificationTitle(e.nativeEvent.text)}
         />
         <TextInput
-          style={tw`w-[90%] border-1 px-4 bg-white rounded`}
+          style={tw`w-[90%] h-10 border-1 px-2 py-1`}
           placeholder="Enter notification time..."
-          value={notificationBody}
+          value={notificationTitle}
           onChange={(e) => setNotificationBody(e.nativeEvent.text)}
         />
         <TextInput
-          style={tw`w-[90%] border-1 px-4 bg-white rounded`}
+          style={tw`w-[90%] h-10 border-1 px-2 py-1`}
           placeholder="Enter notification time..."
-          value={notificationTime}
+          value={notificationTitle}
           onChange={(e) => setNotificationTime(e.nativeEvent.text)}
         />
-        <TouchableOpacity
-          style={tw`w-[90%] rounded h-10 border-1 px-2 py-1 bg-blue-400 active:bg-red-600 flex-1 justify-center items-center`}
-          onPress={() =>
-            schedulePushNotification({
-              title: notificationTitle,
-              body: notificationBody,
-              time: notificationTime,
-            })
-          }
-        >
-          <Text style={tw`text-white text-lg`}>Send Notification</Text>
-        </TouchableOpacity>
       </View>
+
+      <TouchableOpacity
+        style={tw`w-[90%] h-10 border-1 px-2 py-1 bg-blue-400 active:bg-red-600 flex-1 justify-center items-center`}
+        onPress={() =>
+          schedulePushNotification({
+            title: notificationTitle,
+            body: notificationBody,
+            time: notificationTime,
+          })
+        }
+      >
+        <Text style={tw`text-white`}>Send Notification</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
 }
