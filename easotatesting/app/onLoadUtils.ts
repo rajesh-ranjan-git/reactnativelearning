@@ -7,7 +7,6 @@ import Constants from "expo-constants";
 type NotificationContentType = {
   title: string;
   body: string;
-  time: string;
 };
 
 export async function checkForUpdates() {
@@ -84,7 +83,7 @@ export async function schedulePushNotification(
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
-      seconds: Number(NotificationContent.time),
+      seconds: 1,
     },
   });
 }
